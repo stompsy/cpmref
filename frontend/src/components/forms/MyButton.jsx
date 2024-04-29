@@ -7,7 +7,7 @@ export default function MyButton(props) {
 		<Button
 			type={type}
 			variant='contained'
-			className={'w-full !h-12 !mt-4 !mb-4 !bg-orange-600'}>
+			className={'w-full !h-12 !mt-1 !mb-4 !bg-orange-600'}>
 			{label}
 		</Button>
 	)

@@ -1,5 +1,5 @@
-import AxiosInstance from './AxiosInstance'
 import { React, useEffect, useMemo, useState } from 'react'
+import AxiosInstance from './AxiosInstance'
 
 const Home = () => {
 	const [myData, setMyData] = useState()

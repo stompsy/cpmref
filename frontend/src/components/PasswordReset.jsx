@@ -1,50 +1,61 @@
 import { React, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
 import AxiosInstance from './AxiosInstance'
-import MyTextField from './forms/MyTextField'
 import MyPassField from './forms/MyPassField'
 import MyButton from './forms/MyButton'
 import MyMessage from './Message'
 import '../App.css'
 
-const Login = () => {
+const PasswordReset = () => {
 	const navigate = useNavigate()
 	const { handleSubmit, control } = useForm()
+	const { token } = useParams()
+	console.log(token)
+
 	const [showMessage, setShowMessage] = useState(false)
 
 	const submission = (data) => {
-		AxiosInstance.post(`login/`, {
-			email: data.email,
+		AxiosInstance.post(`api/password_reset/confirm/`, {
 			password: data.password,
+			token: token,
 		})
 			.then((response) => {
-				console.log(response)
-				localStorage.setItem('Token', response.data.token)
-				navigate(`/home`)
+				setShowMessage(true)
+				setTimeout(() => {
+					navigate('/')
+				}, 5000)
 			})
 			.catch((error) => {
-				setShowMessage(true)
-				console.error('Error during login: ', error)
+				console.error('Error resetting password: ', error)
 			})
 	}
 
 	return (
-		<div className='flex items-center justify-center h-screen bg-slate-800'>
+		<div className='flex flex-col items-center justify-center h-screen bg-slate-800'>
 			{showMessage ? (
 				<MyMessage
-					msg='Login error. Please try again, or reset your password.'
-					color={'bg-red-600'}
+					msg='Your password reset was successful! You will now be redirected to the login page.'
+					color={'bg-green-600'}
 				/>
 			) : null}
 			<form onSubmit={handleSubmit(submission)}>
 				<div className='bg-slate-200 min-w-80 w-1/4 rounded-md p-8 flex flex-col'>
 					<h5 className='text-xl text-slate-800 mb-1'>Coresponse</h5>
-					<h2 className='text-3xl text-slate-800 mb-8'>User Login</h2>
-					<MyTextField label='Email' name={'email'} control={control} />
+					<h2 className='text-3xl text-slate-800 mb-8'>Reset password</h2>
 					<MyPassField label='Password' name={'password'} control={control} />
-					<MyButton type={'submit'} label='LOGIN' />
+					<MyPassField label='Confirm Password' name={'password2'} control={control} />
+					<MyButton type={'submit'} label='RESET PASSWORD' />
+					<div className='flex mt-4'>
+						<p>Return to</p>
+						<Link
+							to='/'
+							className='text-orange-600 hover:underline hover:underline-offset-4 font-bold ml-1 text-md'>
+							Login
+						</Link>
+						<p className='text-orange-600 font-bold'>?</p>
+					</div>
 					<div className='flex'>
 						<p>Don't have an account?</p>
 						<Link
@@ -53,19 +64,10 @@ const Login = () => {
 							Sign up
 						</Link>
 					</div>
-					<div className='flex'>
-						<p>Forgot password?</p>
-						<Link
-							to='/request/password_reset'
-							className='text-orange-600 hover:underline hover:underline-offset-4 font-bold ml-1 text-md'>
-							Click here
-						</Link>
-						<p className='text-orange-600 font-bold'>?</p>
-					</div>
 				</div>
 			</form>
 		</div>
 	)
 }
 
-export default Login
+export default PasswordReset

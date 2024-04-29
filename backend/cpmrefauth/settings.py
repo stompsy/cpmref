@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "knox",
+    "django_rest_passwordreset",
     # My apps
     "users",
 ]
@@ -69,7 +71,7 @@ ROOT_URLCONF = "cpmrefauth.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -126,6 +128,16 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "PAFD Dashboard"
+EMAIL_HOST_USER = os.environ.get("CPM_EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("CPM_EMAIL_HOST_PASSWORD")
 
 
 # Static files (CSS, JavaScript, Images)

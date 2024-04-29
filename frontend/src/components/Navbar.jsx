@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import AppBar from '@mui/material/AppBar'
@@ -12,7 +13,8 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import HomeIcon from '@mui/icons-material/Home'
 import InfoIcon from '@mui/icons-material/Info'
-import { Link, useLocation } from 'react-router-dom'
+import LogoutIcon from '@mui/icons-material/Logout'
+import AxiosInstance from './AxiosInstance'
 
 const drawerWidth = 240
 
@@ -20,6 +22,18 @@ export default function Navbar(props) {
 	const { content } = props
 	const location = useLocation()
 	const path = location.pathname
+	const navigate = useNavigate()
+
+	const logoutUser = () => {
+		AxiosInstance.post(`logoutall/`, {})
+			.then(() => {
+				localStorage.removeItem('Token')
+				navigate(`/`)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 
 	return (
 		<Box sx={{ display: 'flex' }}>
@@ -58,6 +72,14 @@ export default function Navbar(props) {
 									<InfoIcon />
 								</ListItemIcon>
 								<ListItemText primary={'About'} />
+							</ListItemButton>
+						</ListItem>
+						<ListItem key={3} disablePadding>
+							<ListItemButton onClick={logoutUser}>
+								<ListItemIcon>
+									<LogoutIcon />
+								</ListItemIcon>
+								<ListItemText primary={'Logout'} />
 							</ListItemButton>
 						</ListItem>
 					</List>

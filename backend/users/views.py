@@ -5,6 +5,8 @@ from .models import *
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model, authenticate
 from knox.models import AuthToken
+from knox.views import LoginView as KnoxLoginView
+from rest_framework.authentication import BasicAuthentication
 
 User = get_user_model()
 
